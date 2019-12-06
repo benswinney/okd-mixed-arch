@@ -40,25 +40,6 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub $host
 done
 ```
 
-### Install Atomic for containerized install
-```shell
-for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum install -y atomic'; done
-
-```
-
-### RPM Installer
-```shell
-for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm'; done
-```
-
-```shell
-for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo'; done
-```
-
-```shell
-for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum -y --enablerepo=epel install ansible pyOpenSSL'; done
-```
-
 ### Enable Repos
 subscription-manager repos --enable=rhel-7-server-rpms && \
 subscription-manager repos --enable=rhel-7-server-extras-rpms && \
