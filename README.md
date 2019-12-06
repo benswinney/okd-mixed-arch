@@ -150,3 +150,15 @@ master03.example.com
 master0[1:3].example.com openshift_node_group_name='node-config-master-infra'
 worker0[1:3].example.com openshift_node_group_name='node-config-compute'
 ```
+
+# Install RPM Pre-reqs
+
+```shell
+ansible-playbook ~/openshift-ansible/playbooks/prerequisites.yml
+```
+
+# Deploy Cluster and pray it works :P
+
+```shell
+ansible-playbook ~/openshift-ansible/playbooks/deploy_cluster.yml
+```
