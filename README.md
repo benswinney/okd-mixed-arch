@@ -64,21 +64,51 @@ subscription-manager repos --enable=rhel-7-server-rpms && \
 subscription-manager repos --enable=rhel-7-server-extras-rpms && \
 subscription-manager repos --enable=rhel-7-server-optional-rpms
 
-yum install java-1.8.0-openjdk-headless -y
-
+# Install pip
+```shell
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 
 pip install passlib
+```
 
+# Enable EPEL Repo
+```shell
+yum -y install \
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+```
 
+# Disable EPEL repo globally
+```shell
+sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
+```
 
+# Install Ansible
+```shell
+yum -y --enablerepo=epel install ansible pyOpenSSL
+```
 
+# Install git and openjdk
+```shell
+yum install -y git java-1.8.0-openjdk-headless
+```
+
+# Clone OKD on Master01
+```shell
+cd ~
+git clone https://github.com/openshift/openshift-ansible
+cd openshift-ansible
+git checkout release-3.11
+```
+
+# INGNORE THE DOCKER INSTALL
 ### Install Docker
 ```shell
 for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum -y install docker-1.13.1'; done
 ```
 
+# Create /etc/ansible/hosts file
+```shell
 # Create an OSEv3 group that contains the master, nodes, etcd, and lb groups.
 # The lb group lets Ansible configure HAProxy as the load balancing solution.
 # Comment lb out if your load balancer is pre-configured.
@@ -135,10 +165,10 @@ kubemaster0[1:3].home.swinney.io openshift_node_group_name='node-config-master-i
 kubeworker0[1:3].home.swinney.io openshift_node_group_name='node-config-compute'
 #kubeworker02.home.swinney.io openshift_node_group_name='node-config-compute'
 #kubeworker03.home.swinney.io openshift_node_group_name='node-config-compute'
+```
 
 
 
-yum install java-1.8.0-openjdk-headless -y
 
 
 
