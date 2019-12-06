@@ -46,9 +46,8 @@ subscription-manager repos --enable=rhel-7-server-optional-rpms
 # Install pip
 
 ```shell
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
-
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py &&
+python get-pip.py &&
 pip install passlib
 ```
 
@@ -88,6 +87,7 @@ git checkout release-3.11
 
 # INGNORE THE DOCKER INSTALL
 ### Install Docker
+
 ```shell
 for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum -y install docker-1.13.1'; done
 ```
