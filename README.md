@@ -85,13 +85,6 @@ cd openshift-ansible
 git checkout release-3.11
 ```
 
-# INGNORE THE DOCKER INSTALL
-### Install Docker
-
-```shell
-for host in master01 master02 master03 worker01 worker02; do ssh -t $host 'yum -y install docker-1.13.1'; done
-```
-
 # Create /etc/ansible/hosts file
 
 ```shell
@@ -110,11 +103,16 @@ etcd
 ansible_ssh_user=root
 openshift_deployment_type=origin
 os_firewall_use_firewalld=True
-openshift_metrics_install_metrics=false
+openshift_metrics_install_metrics=true
 # openshift_disable_check=memory_availability
 
 # uncomment the following to enable htpasswd authentication; defaults to AllowAllPasswordIdentityProvider
 #openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+# Set proxy information
+#openshift_http_proxy=http://<user>:<password>@<ip_addr>:<port>
+#openshift_https_proxy=https://<user>:<password>@<ip_addr>:<port>
+#openshift_no_proxy='.hosts.example.com,some-host.com'
 
 # Native high availability cluster method with optional load balancer.
 # If no lb group is defined installer assumes that a load balancer has
@@ -155,6 +153,18 @@ worker0[1:3].example.com openshift_node_group_name='node-config-compute'
 
 ```shell
 ansible-playbook ~/openshift-ansible/playbooks/prerequisites.yml
+```
+
+# Configure docker proxy on all nodes
+
+```shell 
+vi /etc/sysconfig/docker
+
+HTTP_PROXY=<IP>
+HTTPS_PROXY=<IP>
+NO_PROXY=<IP>
+
+systemctl restart docker
 ```
 
 # Deploy Cluster and pray it works :P
